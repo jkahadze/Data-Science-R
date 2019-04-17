@@ -1,0 +1,276 @@
+---
+title: "Homework 4: AB Testing"
+author: "Joseph Kahadze"
+date: "April 16, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+# PART 1
+
+### PROBLEM A
+
+![Derivation](C:\Users\kahad_631u1j7\OneDrive\Desktop\p1.JPG)
+
+### PROBLEM B
+
+```{r 1b}
+n <- 50
+p_a <- 0.5
+exp_x <- p_a
+exp_x
+var_x <- (p_a * (1 - p_a)) / n
+var_x
+```
+
+### PROBLEM C
+
+
+```{r 1c}
+n <- 50
+p_a <- 0.5
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+pval <- 1 - pnorm(p_b, exp_x, sqrt(var_x))
+pval
+```
+
+
+### PROBLEM D
+
+At a signficance level of 0.05 we should not reject the null hypthesis because our caluclated p-value 0.0786 is greater than the significanc level 0.05.
+
+### PROBLEM E
+
+```{r 1e}
+n <- 100
+p_a <- 0.5
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+pval <- 1 - pnorm(p_b, exp_x, sqrt(var_x))
+pval
+```
+
+If we change n from 50 to a 100, than the p-value goes from 0.0786 to 0.0227, which is less than the given significance level of 0.05 thus we have sufficient evidence to reject the null hypthesis.
+
+### PROBLEM F
+
+```{r 1f}
+n <- 100
+a <- 0.05
+p_a <- 0.5
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+q_b <- qnorm(1 - a, p_a, sqrt(var_x))
+q_b
+```
+
+### PROBLEM G
+
+```{r 1g}
+n <- 50
+a <- 0.05
+p_a <- 0.5
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+st_dev <- sqrt(var_x)
+st_dev
+q_b <- qnorm(1 - a, p_a, st_dev)
+dif <- q_b - p_a
+dif
+```
+
+# PART 2
+
+### PROBLEM A
+
+```{r 2a}
+n <- 50
+p_a <- 0.75
+exp_x <- p_a
+exp_x
+var_x <- (p_a * (1 - p_a)) / n
+var_x
+```
+
+### PROBLEM B
+
+```{r 2b}
+n <- 50
+p_a <- 0.75
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+pval <- 1 - pnorm(p_b, exp_x, sqrt(var_x))
+pval
+```
+
+### PROBLEM C
+
+At a significance level of 0.05, we shoudd not reject the null hypthesis because our calculated p-value is 0.9928 which is greater than the significance level 0.05.
+
+### PROBLEM D
+
+```{r 2d}
+n <- 100
+p_a <- 0.75
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+pval <- 1 - pnorm(p_b, exp_x, sqrt(var_x))
+pval
+```
+
+If we change n from 50 to a 100, than the p-value goes from 0.9928 to 0.9997, which is still greater than the given significance level of 0.05 thus we do not have sufficient evidence to reject the null hypthesis.
+
+### PROBLEM E
+
+```{r 2e}
+n <- 100
+p_a <- 0.75
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+q_b <- qnorm(1 - a, p_a, sqrt(var_x))
+q_b
+```
+
+### PROBLEM F
+
+```{r 2f}
+n <- 50
+p_a <- 0.75
+p_b <- 0.6
+exp_x <- p_a
+var_x <- (p_a * (1 - p_a)) / n
+st_dev <- sqrt(var_x)
+st_dev
+q_b <- qnorm(1 - a, p_a, st_dev)
+dif <- q_b - p_a
+dif
+```
+
+# PART 3
+
+The smallest detectable improvment in 1g, 0.1163087,  is greater than that in 2f, 0.1007263. This makes sense mathamatically because the standard deviation of the distribution in part 1, 0.0707, is greater than the standard deviation in part 2, 0.06124, therefore for a constant change in x for the part 1 distribution, y will change to a lesser extent than for an equivalent change in x for the part 2 distribution. 
+
+# PART 4
+
+### PROBLEM A
+
+
+![Derivation](C:\Users\kahad_631u1j7\OneDrive\Desktop\p2.JPG)
+
+### PROBLEM B
+
+```{r 4b}
+n_a <- 55
+n_b <- 45
+s_a <- 35
+s_b <- 35
+tot_s <- s_a + s_b
+tot_n <- n_a + n_b
+avg_p <- tot_s / tot_n
+avg_p
+```
+
+### PROBLEM C
+
+```{r 4c}
+n_a <- 55
+n_b <- 45
+s_a <- 35
+s_b <- 35
+tot_s <- s_a + s_b
+tot_n <- n_a + n_b
+avg_p <- tot_s / tot_n
+
+var_ab <- avg_p * (1 - avg_p)
+
+var_y <- (var_ab / n_b) + (var_ab / n_a)
+
+var_y
+```
+
+### PROBLEM D
+
+```{r 4d}
+n_a <- 55
+n_b <- 45
+s_a <- 35
+s_b <- 35
+p_a <- s_a / n_a
+p_b <- s_b / n_b
+
+y_hat <- p_b - p_a
+y_hat
+```
+
+### PROBLEM E
+
+```{r 4e}
+n_a <- 55
+n_b <- 45
+s_a <- 35
+s_b <- 35
+p_a <- s_a / n_a
+p_b <- s_b / n_b
+tot_s <- s_a + s_b
+tot_n <- n_a + n_b
+avg_p <- tot_s / tot_n
+
+var_ab <- avg_p * (1 - avg_p)
+var_y <- (var_ab / n_b) + (var_ab / n_a)
+st_dev <- sqrt(var_y)
+
+y_hat <- p_b - p_a
+
+pval <- 1 - pnorm(y_hat, 0, st_dev)
+pval
+```
+
+### PROBLEM F
+
+At a significance level of 0.05, we do not have sufficient evidence to reject the null hypothesis because our p_value, 0.0623 is greater than the significance level, 0.05.
+
+### BONUS
+
+```{r bonus}
+n_a <- 55
+n_b <- 45
+s_a <- 35
+s_b <- 35
+a <- 0.05
+p_a <- s_a / n_a
+p_b <- s_b / n_b
+tot_s <- s_a + s_b
+tot_n <- n_a + n_b
+avg_p <- tot_s / tot_n
+
+var_ab <- avg_p * (1 - avg_p)
+var_y <- (var_ab / n_b) + (var_ab / n_a)
+st_dev <- sqrt(var_y)
+
+df <- data.frame(matrix(ncol = 2, nrow = 100))
+names <- c("p", "diff")
+colnames(df) <- names
+
+for (val in 1:100){
+  pv <- val * .01
+  df$p[val] <- pv
+  df$diff[val] <- qnorm(1 - a, pv, st_dev)
+}
+
+ggplot(data=df, aes(x=p, y=diff, group=1)) +
+  geom_line()+
+  geom_point()
+
+```
