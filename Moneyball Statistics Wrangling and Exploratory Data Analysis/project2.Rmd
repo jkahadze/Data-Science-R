@@ -1,0 +1,67 @@
+---
+title: "Project2"
+author: "Joseph Kahadze"
+date: "March 27, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+## SQL
+
+```{r setupdb, include=FALSE}
+# make sure you write the path to your sqlite path here
+db <- DBI::dbConnect(RSQLite::SQLite(), "C:/Users/jkahadze/Downloads/lahman2016.sqlite")
+```
+
+```{sql p1, connection=db, eval=TRUE, output.var="payroll_df"}
+
+SELECT teamID, franchID, yearID, salary, W, L, G, ((W * 1.0)/(G * 1.0)*100.0) AS WPERC FROM (SELECT * FROM Teams JOIN Salaries 
+WHERE Teams.teamID = Salaries.teamID ) WHERE yearID >= 1994 and yearID <= 2014 GROUP BY teamID, yearID ORDER BY salary DESC 
+
+```
+
+```{r print_result}
+
+View(payroll_df)
+
+sum_df <- payroll_df %>%
+  group_by(yearID) %>%
+  summarise(salary = sum(salary))
+
+sum_df %>%
+  ggplot(mapping=aes(x=yearID, y=salary)) +
+    geom_bar(stat="identity") + scale_y_continuous(labels = scales::comma)
+```
+
+
+```{r print_result}
+mean_df <- payroll_df %>%
+  group_by(yearID) %>%
+  summarise(salary = mean(salary))
+
+mean_df %>%
+  ggplot(mapping=aes(x=yearID, y=salary)) +
+    geom_bar(stat="identity") + scale_y_continuous(labels = scales::comma)
+    
+```
+
+```{r print_result}
+cut_df <- payroll_df
+
+cut_df$group <- cut_df$yearID %>%
+  cut(breaks=5) 
+
+cut_df %>%
+  ggplot(mapping=aes(x=salary, y=WPERC)) +
+    geom_point() +
+    geom_smooth(method=lm)
+```
+
+```{r disconnectdb, include=FALSE}
+DBI::dbDisconnect(db)
+```
