@@ -1,0 +1,47 @@
+---
+title: "Project 4: Interactive Data Visualization and Mapping"
+author: "Joseph Kahadze"
+date: "May 14, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(stringr)
+library(leaflet)
+library(webshot)
+
+arrest_tab <- read_csv("http://www.hcbravo.org/IntroDataSci/misc/BPD_Arrests.csv")
+```
+
+My interactive map shows every instance of an arrest in the city of Baltimore from the BPD Arrests data set with each arrest represented by a circle. The circles are colored based on the district of the particular crime to highlight district boundaries and the density of arrests by district. Furthermore, I included a legend on the bottom right of the interactive map to show which district is represented by which color. 
+
+```{r p1}
+dat <- arrest_tab %>% 
+  filter(!is.na(`Location 1`)) %>%
+  separate(`Location 1`, c("lat","lng"), sep=",") %>%
+  mutate(lat=as.numeric(str_replace(lat, "\\(", ""))) %>%
+  mutate(lng=as.numeric(str_replace(lng, "\\)", ""))) %>%
+  sample_n(2000)
+dat
+```
+
+```{r p2, fig.width = 8.5, fig.height = 5.5}
+pal <- colorFactor(c("black", "red", "yellow", "brown", "blue", "orange", "purple", "navy", "maroon"), domain = c("SOUTHERN", "NORTHEASTERN", "WESTERN", "NORTHERN", "NORTHWESTERN", "CENTRAL", "SOUTHWESTERN", "SOUTHEASTERN", "EASTERN"))
+
+balto_map <- leaflet(dat) %>%
+  addTiles() %>%
+  setView(lat=39.29, lng=-76.61, zoom=11) %>%
+  addCircleMarkers(
+    radius = 6,
+    color = ~pal(district),
+    stroke = FALSE, fillOpacity = 0.3) %>%
+  addLegend("bottomright", pal = pal, values = ~district,
+    title = "District by Color",
+    opacity = 1
+  )
+
+balto_map
+```
